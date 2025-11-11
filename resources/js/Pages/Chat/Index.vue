@@ -33,7 +33,7 @@ import EmptyState from '@/Components/Chat/EmptyState.vue'
 
 const props = defineProps({
     contacts: Array,
-    messages: Array,
+    messages: Object,
     selectedContact: Object,
     channels: Array,
 })

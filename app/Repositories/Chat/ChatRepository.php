@@ -5,6 +5,7 @@ namespace App\Repositories\Chat;
 use App\Models\Channel;
 use App\Models\Contact;
 use App\Models\User;
+use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Database\Eloquent\Collection;
 
 class ChatRepository
@@ -28,10 +29,10 @@ class ChatRepository
         return $user->contacts()->findOrFail($contactId);
     }
 
-    public function getMessagesForContact(Contact $contact): Collection
+    public function getMessagesForContact(Contact $contact): Paginator
     {
         return $contact->messages()
-            ->orderBy('created_at', 'asc')
-            ->get();
+            ->orderBy('created_at', 'desc')
+            ->simplePaginate(30);
     }
 }

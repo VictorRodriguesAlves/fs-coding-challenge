@@ -18,25 +18,28 @@ class ChatService
         $channels = $this->chatRepository->getAllChannels();
         $contacts = $this->chatRepository->getContactsForUser($user);
 
+        $messagesPaginator = null;
         $selectedContact = null;
-        $messages = null;
 
         if ($selectedContactId) {
             $selectedContact = $this->chatRepository->findContactForUser($user, $selectedContactId);
 
             $this->markMessagesAsRead($selectedContact);
 
-            $messages = $this->chatRepository->getMessagesForContact($selectedContact);
+            $messagesPaginator = $this->chatRepository->getMessagesForContact($selectedContact);
+
+            $messagesPaginator->getCollection()->transform(function ($message) use ($user) {
+                return $this->transformMessage($message, $user);
+            });
         }
 
         return [
             'contacts' => $this->transformContacts($contacts),
-            'messages' => $messages ? $this->transformMessages($messages, $user) : null,
+            'messages' => $messagesPaginator,
             'selectedContact' => $selectedContact,
             'channels' => $this->transformChannels($channels),
         ];
     }
-
     private function markMessagesAsRead(Contact $contact): void
     {
         $contact->unreadMessages()->update(['read_at' => now()]);
@@ -57,25 +60,23 @@ class ChatService
         });
     }
 
-    private function transformMessages(Collection $messages, User $user): Collection
-    {
-        return $messages->map(function ($message) use ($user) {
-            return [
-                'id' => $message->id,
-                'text' => $message->content,
-                'sender' => $message->sender_id === $user->id ? 'me' : 'contact',
-                'time' => $message->created_at->format('H:i'),
-                'date' => $message->created_at->toDateString(),
-                'status' => $message->status,
-            ];
-        });
-    }
-
     private function transformChannels(Collection $channels): Collection
     {
         return $channels->map(fn ($channel) => [
             'id' => $channel->id,
             'name' => $channel->name,
         ]);
+    }
+
+    private function transformMessage($message, User $user): array
+    {
+        return [
+            'id' => $message->id,
+            'text' => $message->content,
+            'sender' => $message->sender_id === $user->id ? 'me' : 'contact',
+            'time' => $message->created_at->format('H:i'),
+            'date' => $message->created_at->toDateString(),
+            'status' => $message->status,
+        ];
     }
 }
