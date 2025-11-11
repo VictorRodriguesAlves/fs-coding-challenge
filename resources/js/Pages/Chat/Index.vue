@@ -66,7 +66,7 @@ onMounted(() => {
             preserveScroll: true,
             only: ['contacts', 'messages', 'selectedContact'],
         })
-    }, 1000)
+    }, 3000)
 })
 
 onUnmounted(() => {

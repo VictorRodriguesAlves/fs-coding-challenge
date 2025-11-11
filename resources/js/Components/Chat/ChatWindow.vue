@@ -61,11 +61,11 @@ const scrollToBottom = () => {
     }
 }
 
-watch(() => props.messages, () => {
+watch(() => props.messages.length, () => {
     nextTick(() => {
         scrollToBottom()
     })
-}, { deep: true, immediate: true })
+}, { immediate: true })
 
 
 const formatDate = (dateString) => {
