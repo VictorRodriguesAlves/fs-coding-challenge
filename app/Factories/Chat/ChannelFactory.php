@@ -14,9 +14,9 @@ class ChannelFactory
     public function make(Channel $channel): ChannelInterface
     {
         return match ($channel->name) {
-            'WhatsApp' => new WhatsAppChannel(),
-            'Messenger' => new MessengerChannel(),
-            'Email' => new EmailChannel(),
+            'whatsapp' => new WhatsAppChannel(),
+            'messenger' => new MessengerChannel(),
+            'email' => new EmailChannel(),
             default => throw new InvalidArgumentException("Canal '{$channel->name}' não suportado."),
         };
     }

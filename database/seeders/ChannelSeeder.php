@@ -14,10 +14,10 @@ class ChannelSeeder extends Seeder
     public function run(): void
     {
         Channel::query()
-            ->firstOrCreate(['name' => 'WhatsApp']);
+            ->firstOrCreate(['name' => 'whatsapp']);
         Channel::query()
-            ->firstOrCreate(['name' => 'Messenger']);
+            ->firstOrCreate(['name' => 'messenger']);
         Channel::query()
-            ->firstOrCreate(['name' => 'Email']);
+            ->firstOrCreate(['name' => 'email']);
     }
 }

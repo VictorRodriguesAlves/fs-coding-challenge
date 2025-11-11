@@ -15,9 +15,9 @@ class UserSeeder extends Seeder
     {
         User::query()
             ->firstOrCreate(
-                ['email' => 'atendente@example.com'],
+                ['email' => 'user@example.com'],
                 [
-                    'name' => 'Atendente Padrão',
+                    'name' => 'Usuario Padrão',
                     'password' => 'password'
                 ]
             );

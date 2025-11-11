@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Contact;
 use App\Models\User;
 use Auth;
 use Illuminate\Foundation\Http\FormRequest;
@@ -14,10 +15,19 @@ class StoreMessageRequest extends FormRequest
     public function authorize(): bool
     {
         $user = User::find(1);
+
         if (!$user) {
             return false;
         }
+
         Auth::login($user);
+
+        $contact = Contact::find($this->contact_id);
+
+        if (!$contact) {
+            return true;
+        }
+
         return $user->contacts()->where('contact_id', $this->contact_id)->exists();
     }
 

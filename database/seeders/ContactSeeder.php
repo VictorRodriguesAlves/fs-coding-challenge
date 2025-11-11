@@ -17,15 +17,15 @@ class ContactSeeder extends Seeder
      */
     public function run(): void
     {
-        $atendente = User::query()
-            ->where('email', 'atendente@example.com')
+        $user = User::query()
+            ->where('email', 'user@example.com')
             ->first();
 
-        $channelWA = Channel::query()
-            ->where('name', 'WhatsApp')
+        $channel = Channel::query()
+            ->where('name', 'whatsapp')
             ->first();
 
-        if (!$atendente || !$channelWA) {
+        if (!$user || !$channel) {
             $this->command->error('UserSeeder e ChannelSeeder precisam ser executados primeiro!');
             return;
         }
@@ -37,13 +37,13 @@ class ContactSeeder extends Seeder
                 []
             );
 
-        $atendente->contacts()->syncWithoutDetaching([$contact->id]);
+        $user->contacts()->syncWithoutDetaching([$contact->id]);
 
         ContactIdentifier::query()
             ->firstOrCreate(
                 [
                     'contact_id' => $contact->id,
-                    'channel_id' => $channelWA->id
+                    'channel_id' => $channel->id
                 ],
                 ['identifier' => '+5511999998888']
             );
@@ -56,7 +56,7 @@ class ContactSeeder extends Seeder
                     'content' => 'Olá! Esta é uma mensagem de teste para começar.'
                 ],
                 [
-                    'channel_id' => $channelWA->id,
+                    'channel_id' => $channel->id,
                     'status' => 'sent',
                     'read_at' => null
                 ]
