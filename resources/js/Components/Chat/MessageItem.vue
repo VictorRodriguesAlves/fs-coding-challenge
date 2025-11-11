@@ -12,20 +12,20 @@
           : 'bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-bl-sm shadow-sm'
       ]"
         >
-            <p class="text-sm">{{ message.text }}</p>
+            <p class="text-sm break-all">{{ message.text }}</p>
             <div class="flex items-center justify-end gap-1 mt-1">
         <span
             :class="[
-            'text-xs',
-            message.sender === 'me' ? 'text-blue-100' : 'text-gray-500 dark:text-gray-400'
-          ]"
+                'text-xs',
+                message.sender === 'me' ? 'text-blue-100' : 'text-gray-500 dark:text-gray-400'
+            ]"
         >
           {{ message.time }}
         </span>
                 <div v-if="message.sender === 'me'" class="ml-1">
                     <Loader2 v-if="message.status === 'sending'" class="w-3 h-3 text-blue-100 animate-spin" />
                     <Check v-else-if="message.status === 'sent'" class="w-3 h-3 text-blue-100" />
-                    <AlertCircle v-else-if="message.status === 'failed'" class="w-3 h-3 text-red-300" />
+                    <AlertCircle v-else-if="message.status === 'failed'" class="w-3 h-3 text-red-800" />
                 </div>
             </div>
         </div>
