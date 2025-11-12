@@ -39,12 +39,13 @@ class GenerateMessages extends Command
             $user = User::findOrFail(1);
 
             if ($contactId) {
-                $this->info("Gerando $count mensagens para o Contato ID: $contactId (do Usuário 1)...");
+                $this->info("Gerando $count mensagens para o contato de ID: $contactId (do usuário 1)...");
                 $this->generateForSpecificContact($user, $contactId, $count);
+            }else{
+                $this->info("Gerando $count mensagens aleatoriamente para os contatos do usuário 1...");
+                $this->generateRandomly($user, $count);
             }
 
-            $this->info("Gerando $count mensagens aleatoriamente para os contatos do Usuário 1...");
-            $this->generateRandomly($user, $count);
 
         } catch (\Exception $e) {
             $this->error("Erro: " . $e->getMessage());
@@ -60,7 +61,7 @@ class GenerateMessages extends Command
         try {
             $contact = $user->contacts()->findOrFail($contactId);
         } catch (ModelNotFoundException $e) {
-            throw new \Exception("Contato ID $contactId não encontrado ou não pertence ao Usuário 1.");
+            throw new \Exception("Contato do ID $contactId não encontrado ou não pertence ao usuário 1.");
         }
 
         $channelIds = Channel::query()
@@ -105,7 +106,7 @@ class GenerateMessages extends Command
     {
         $isIncoming = (rand(0, 1) === 0);
         $messageData = [
-            'recipient_id' => $contact->id,
+            'contact_id' => $contact->id,
             'channel_id' => $channelIds->random(),
             'content' => fake()->sentence(rand(3, 20)),
             'created_at' => now(),
@@ -113,11 +114,11 @@ class GenerateMessages extends Command
         ];
 
         if ($isIncoming) {
-            $messageData['sender_id'] = null;
+            $messageData['user_id'] = null;
             $messageData['status'] = 'sent';
             $messageData['read_at'] = null;
         } else {
-            $messageData['sender_id'] = $senderUser->id;
+            $messageData['user_id'] = $senderUser->id;
             $messageData['status'] = 'sent';
             $messageData['read_at'] = null;
         }
@@ -127,8 +128,8 @@ class GenerateMessages extends Command
 
         if (!$isIncoming) {
             Message::query()
-                ->where('recipient_id', $contact->id)
-                ->whereNull('sender_id')
+                ->where('contact_id', $contact->id)
+                ->whereNull('user_id')
                 ->whereNull('read_at')
                 ->update(['read_at' => now()]);
         }

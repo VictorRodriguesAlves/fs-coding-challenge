@@ -22,9 +22,9 @@ describe('Channel Factory', function () {
             ->toBeInstanceOf($expectedClass);
 
     })->with([
-        'whatsapp' => ['WhatsApp', WhatsAppChannel::class],
-        'email' => ['Email', EmailChannel::class],
-        'messenger' => ['Messenger', MessengerChannel::class],
+        'whatsapp' => ['whatsapp', WhatsAppChannel::class],
+        'email' => ['email', EmailChannel::class],
+        'messenger' => ['messenger', MessengerChannel::class],
     ]);
 
 

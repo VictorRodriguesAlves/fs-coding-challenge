@@ -57,9 +57,9 @@ class GenerateContacts extends Command
                 'identifier' => fake()->unique()->e164PhoneNumber(),
             ]);
             Message::factory()->create([
-                'recipient_id' => $contact->id,
+                'contact_id' => $contact->id,
                 'channel_id' => $channel->id,
-                'sender_id' => null,
+                'user_id' => null,
                 'content' => fake()->sentence(6),
                 'status' => 'sent',
                 'read_at' => null,

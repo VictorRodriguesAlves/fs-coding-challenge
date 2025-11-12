@@ -44,8 +44,8 @@ describe('Send Message Process', function () {
         $this->assertDatabaseHas('messages', [
             'content' => 'Hello test message',
             'status' => 'sending',
-            'sender_id' => $this->user->id,
-            'recipient_id' => $this->contact->id
+            'user_id' => $this->user->id,
+            'contact_id' => $this->contact->id
         ]);
     });
 
@@ -67,7 +67,7 @@ describe('Send Message Process', function () {
         $message = Message::factory()->create([
             'status' => 'sending',
             'channel_id' => $this->channel->id,
-            'recipient_id' => $this->contact->id,
+            'contact_id' => $this->contact->id,
         ]);
 
         (new SendMessageJob($message))->handle($this->app->make(ChannelFactory::class));
@@ -97,7 +97,7 @@ describe('Send Message Process', function () {
         $message = Message::factory()->create([
             'status' => 'sending',
             'channel_id' => $this->channel->id,
-            'recipient_id' => $this->contact->id,
+            'contact_id' => $this->contact->id,
         ]);
 
         (new SendMessageJob($message))->handle($this->app->make(ChannelFactory::class));

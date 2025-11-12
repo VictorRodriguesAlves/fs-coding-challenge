@@ -33,6 +33,6 @@ class ChatRepository
     {
         return $contact->messages()
             ->orderBy('created_at', 'desc')
-            ->simplePaginate(30);
+            ->simplePaginate(20);
     }
 }

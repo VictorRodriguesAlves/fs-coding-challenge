@@ -39,11 +39,11 @@ describe('Chat Page (GET /chat)', function () {
     it('returns messages when a contact is selected', function () {
         $contact = Contact::factory()->create();
         $this->user->contacts()->attach($contact);
-        Message::factory(5)->create(['recipient_id' => $contact->id]);
+        $messages = Message::factory(5)->create(['contact_id' => $contact->id]);
 
-        $this->get(route('chat.index', ['contact_id' => $contact->id]))
+        $this->get(route('chat.show', ['contact' => $contact->id]))
             ->assertOk()
-            ->assertInertia(fn($page) => $page->has('messages', 5));
+            ->assertInertia(fn($page) => $page->has('messages.data', 5));
     });
 
     it('marks messages as read when contact is selected', function () {
@@ -51,12 +51,12 @@ describe('Chat Page (GET /chat)', function () {
         $this->user->contacts()->attach($contact);
 
         $messages = Message::factory(3)->create([
-            'recipient_id' => $contact->id,
-            'sender_id' => null,
+            'contact_id' => $contact->id,
+            'user_id' => null,
             'read_at' => null
         ]);
 
-        $this->get(route('chat.index', ['contact_id' => $contact->id]));
+        $this->get(route('chat.show', ['contact' => $contact->id]));
 
         foreach ($messages as $message) {
             $this->assertNotNull($message->fresh()->read_at);
@@ -68,8 +68,8 @@ describe('Chat Page (GET /chat)', function () {
         $unauthorizedContact = Contact::factory()->create();
         $otherUser->contacts()->attach($unauthorizedContact);
 
-        $this->get(route('chat.index', ['contact_id' => $unauthorizedContact->id]))
-            ->assertNotFound();
+        $this->get(route('chat.show', ['contact' => $unauthorizedContact->id]))
+            ->assertForbidden();
     });
 
 });

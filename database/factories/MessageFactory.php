@@ -20,9 +20,9 @@ class MessageFactory extends Factory
     public function definition(): array
     {
         return [
-            'recipient_id' => Contact::factory(),
+            'contact_id' => null,
             'channel_id' => Channel::factory(),
-            'sender_id' => User::factory(),
+            'user_id' => null,
             'content' => fake()->sentence(),
             'status' => fake()->randomElement(['sending', 'sent', 'failed']),
             'read_at' => fake()->randomElement([null, now()]),

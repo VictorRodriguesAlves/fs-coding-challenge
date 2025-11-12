@@ -74,7 +74,7 @@ class ChatService
         return [
             'id' => $message->id,
             'text' => $message->content,
-            'sender' => $message->sender_id === $user->id ? 'me' : 'contact',
+            'sender' => $message->user_id === $user->id ? 'me' : 'contact',
             'time' => $message->created_at->format('H:i'),
             'date' => $message->created_at->toIso8601String(),
             'status' => $message->status,

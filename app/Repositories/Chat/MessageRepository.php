@@ -14,8 +14,8 @@ class MessageRepository
                 ->create([
                     'content' => $validatedData['content'],
                     'channel_id' => $validatedData['channel_id'],
-                    'recipient_id' => $validatedData['contact_id'],
-                    'sender_id' => $sender->id,
+                    'contact_id' => $validatedData['contact_id'],
+                    'user_id' => $sender->id,
                     'status' => 'sending',
                 ]);
     }

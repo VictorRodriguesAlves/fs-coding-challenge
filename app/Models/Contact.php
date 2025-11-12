@@ -28,18 +28,18 @@ class Contact extends Model
 
     public function messages(): HasMany
     {
-        return $this->hasMany(Message::class, 'recipient_id');
+        return $this->hasMany(Message::class, 'contact_id');
     }
 
     public function latestMessage(): HasOne
     {
-        return $this->hasOne(Message::class, 'recipient_id')->latest('created_at');
+        return $this->hasOne(Message::class, 'contact_id')->latest('created_at');
     }
 
     public function unreadMessages(): HasMany
     {
-        return $this->hasMany(Message::class, 'recipient_id')
-            ->whereNull('sender_id')
+        return $this->hasMany(Message::class, 'contact_id')
+            ->whereNull('user_id')
             ->whereNull('read_at');
     }
 }

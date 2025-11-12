@@ -11,8 +11,8 @@ class Message extends Model
     use HasFactory;
 
     protected $fillable = [
-        'recipient_id',
-        'sender_id',
+        'contact_id',
+        'user_id',
         'channel_id',
         'content',
         'status',
@@ -34,7 +34,7 @@ class Message extends Model
 
     public function sender(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'sender_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function channel(): BelongsTo

@@ -51,8 +51,8 @@ class ContactSeeder extends Seeder
         Message::query()
             ->firstOrCreate(
                 [
-                    'recipient_id' => $contact->id,
-                    'sender_id' => null,
+                    'contact_id' => $contact->id,
+                    'user_id' => null,
                     'content' => 'Olá! Esta é uma mensagem de teste para começar.'
                 ],
                 [
