@@ -90,7 +90,7 @@ const scrollToBottom = () => {
 }
 
 const formatDate = (dateString) => {
-    console.log(dateString)
+
     const date = new Date(dateString)
     const today = new Date()
     const yesterday = new Date(today)

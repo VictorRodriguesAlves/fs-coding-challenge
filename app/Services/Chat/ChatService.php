@@ -7,6 +7,8 @@ use App\Models\User;
 use App\Repositories\Chat\ChatRepository;
 use Illuminate\Support\Collection;
 use Illuminate\Auth\Access\AuthorizationException;
+use App\Http\Resources\ChannelResource;
+use App\Http\Resources\ContactResource;
 
 class ChatService
 {
@@ -33,10 +35,10 @@ class ChatService
         }
 
         return [
-            'contacts' => $this->transformContacts($contacts),
+            'contacts' => ContactResource::collection($contacts),
             'messages' => $messagesPaginator,
             'selectedContact' => $selectedContact,
-            'channels' => $this->transformChannels($channels),
+            'channels' => ChannelResource::collection($channels),
         ];
     }
 
@@ -53,21 +55,6 @@ class ChatService
     {
         $contact->unreadMessages()->update(['read_at' => now()]);
     }
-
-    private function transformContacts(Collection $contacts): Collection
-    {
-        return $contacts->map(function ($contact) {
-            return [
-                'id' => $contact->id,
-                'name' => $contact->name,
-                'lastMessage' => $contact->latestMessage?->content,
-                'lastMessageTime' => $contact->latestMessage?->created_at->diffForHumans(),
-                'unreadCount' => $contact->unread_messages_count,
-                'online' => false,
-            ];
-        });
-    }
-
     private function transformMessage($message, User $user): array
     {
         return [
@@ -80,11 +67,4 @@ class ChatService
         ];
     }
 
-    private function transformChannels(Collection $channels): Collection
-    {
-        return $channels->map(fn ($channel) => [
-            'id' => $channel->id,
-            'name' => $channel->name,
-        ]);
-    }
 }
