@@ -17,7 +17,7 @@
         class="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50 dark:bg-gray-900"
         @scroll="onScroll"
     >
-        <div v-if="loading" class="flex justify-center my-4">
+        <div v-if="loadingMore" class="flex justify-center my-4">
             <Loader2 class="w-6 h-6 text-gray-400 animate-spin" />
         </div>
 
@@ -41,70 +41,39 @@
 
 <script setup>
 import { ref, computed, watch, nextTick } from 'vue'
-import { router } from '@inertiajs/vue3'
 import MessageItem from '@/Components/Chat/MessageItem.vue'
 import { Loader2 } from 'lucide-vue-next'
 
 const props = defineProps({
-    messages: Object,
+    messages: Array,
     selectedContact: Object,
+    loadingMore: Boolean,
 })
+
+const emit = defineEmits(['loadMore'])
 
 const messagesContainer = ref(null)
-const loading = ref(false)
 
-const messagesToShow = ref(props.messages ? props.messages.data.slice().reverse() : [])
-const nextPageUrl = ref(props.messages ? props.messages.next_page_url : null)
-
-watch(() => props.selectedContact?.id, () => {
-    messagesToShow.value = props.messages ? props.messages.data.slice().reverse() : []
-    nextPageUrl.value = props.messages ? props.messages.next_page_url : null
-
-    nextTick(() => {
-        scrollToBottom()
-    })
+watch(() => props.messages.length, (newLength, oldLength) => {
+    if (newLength > oldLength) {
+        nextTick(() => scrollToBottom())
+    }
 })
 
-const loadMoreMessages = () => {
-    if (!nextPageUrl.value || loading.value) {
-        return
-    }
-
-    loading.value = true
-    const oldScrollHeight = messagesContainer.value.scrollHeight
-
-    router.get(nextPageUrl.value, {
-        contact_id: props.selectedContact.id,
-    }, {
-        preserveState: true,
-        preserveScroll: true,
-        onSuccess: (page) => {
-            const newMessages = page.props.messages.data.slice().reverse()
-            messagesToShow.value = [...newMessages, ...messagesToShow.value]
-            nextPageUrl.value = page.props.messages.next_page_url
-
-            nextTick(() => {
-                messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight - oldScrollHeight
-            })
-
-            loading.value = false
-        },
-        onError: () => {
-            loading.value = false
-        }
-    })
-}
+watch(() => props.selectedContact?.id, () => {
+    nextTick(() => scrollToBottom())
+}, { immediate: true })
 
 const onScroll = (e) => {
     if (e.target.scrollTop === 0) {
-        loadMoreMessages()
+        emit('loadMore')
     }
 }
 
 const groupedMessages = computed(() => {
-    if (!messagesToShow.value) return {}
+    if (!props.messages) return {}
     const groups = {}
-    messagesToShow.value.forEach(message => {
+    props.messages.forEach(message => {
         const date = formatDate(message.date)
         if (!groups[date]) {
             groups[date] = []

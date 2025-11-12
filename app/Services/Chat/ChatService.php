@@ -6,6 +6,7 @@ use App\Models\Contact;
 use App\Models\User;
 use App\Repositories\Chat\ChatRepository;
 use Illuminate\Support\Collection;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class ChatService
 {
@@ -13,16 +14,15 @@ class ChatService
         private ChatRepository $chatRepository
     ) {}
 
-    public function getPageData(User $user, int $selectedContactId = null): array
+    public function getPageData(User $user, Contact $selectedContact = null): array
     {
         $channels = $this->chatRepository->getAllChannels();
         $contacts = $this->chatRepository->getContactsForUser($user);
 
         $messagesPaginator = null;
-        $selectedContact = null;
 
-        if ($selectedContactId) {
-            $selectedContact = $this->chatRepository->findContactForUser($user, $selectedContactId);
+        if ($selectedContact) {
+            $this->validateContactOwnership($user, $selectedContact);
 
             $this->markMessagesAsRead($selectedContact);
 
@@ -40,11 +40,20 @@ class ChatService
             'channels' => $this->transformChannels($channels),
         ];
     }
+
+    private function validateContactOwnership(User $user, Contact $contact): void
+    {
+        try {
+            $this->chatRepository->findContactForUser($user, $contact->id);
+        } catch (\Exception $e) {
+            throw new AuthorizationException("Você não tem permissão para ver este contato.");
+        }
+    }
+
     private function markMessagesAsRead(Contact $contact): void
     {
         $contact->unreadMessages()->update(['read_at' => now()]);
     }
-
 
     private function transformContacts(Collection $contacts): Collection
     {
@@ -60,14 +69,6 @@ class ChatService
         });
     }
 
-    private function transformChannels(Collection $channels): Collection
-    {
-        return $channels->map(fn ($channel) => [
-            'id' => $channel->id,
-            'name' => $channel->name,
-        ]);
-    }
-
     private function transformMessage($message, User $user): array
     {
         return [
@@ -78,5 +79,13 @@ class ChatService
             'date' => $message->created_at->toDateString(),
             'status' => $message->status,
         ];
+    }
+
+    private function transformChannels(Collection $channels): Collection
+    {
+        return $channels->map(fn ($channel) => [
+            'id' => $channel->id,
+            'name' => $channel->name,
+        ]);
     }
 }

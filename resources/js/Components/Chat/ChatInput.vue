@@ -53,7 +53,7 @@
 
 <script setup>
 import { watch } from 'vue'
-import { useForm } from '@inertiajs/vue3'
+import {router, useForm} from '@inertiajs/vue3'
 import { Send, Loader2 } from 'lucide-vue-next'
 
 const props = defineProps({
@@ -81,6 +81,13 @@ const sendMessage = () => {
         preserveScroll: true,
         onSuccess: () => {
             form.reset('content')
+
+            router.reload({
+                preserveScroll: true,
+                preserveState: true,
+                only: ['messages', 'contacts'],
+            })
+
         },
     })
 }

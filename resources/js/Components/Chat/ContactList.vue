@@ -1,7 +1,11 @@
 <template>
     <div class="w-80 border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 flex flex-col">
         <div class="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
-            <h1 class="text-xl font-bold text-gray-900 dark:text-white">Conversas</h1>
+
+            <Link :href="route('chat.index')" class="cursor-pointer">
+                <h1 class="text-xl font-bold text-gray-900 dark:text-white">Conversas</h1>
+            </Link>
+
             <button
                 @click="$emit('toggleTheme')"
                 class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors cursor-pointer"
@@ -35,7 +39,7 @@
                             <h3 class="font-semibold text-gray-900 dark:text-white truncate">
                                 {{ contact.name }}
                             </h3>
-                            <span class="text-xs text-gray-500 dark:text-gray-400 flex-shrink-0">
+                            <span class="text-xs text-gray-500 dark:text-gray-400 flex-shrink-0 ml-1">
                                 {{ contact.lastMessageTime }}
                             </span>
                         </div>
@@ -58,7 +62,7 @@
 </template>
 
 <script setup>
-import { router } from '@inertiajs/vue3'
+import {Link, router} from '@inertiajs/vue3'
 import { Moon, Sun } from 'lucide-vue-next'
 
 defineProps({
@@ -70,9 +74,7 @@ defineProps({
 defineEmits(['toggleTheme'])
 
 const selectContact = (contact) => {
-    router.get(route('chat.index'), {
-        contact_id: contact.id
-    }, {
+    router.get(route('chat.show', {contact: contact.id}), {}, {
         preserveState: true,
         preserveScroll: true,
     })

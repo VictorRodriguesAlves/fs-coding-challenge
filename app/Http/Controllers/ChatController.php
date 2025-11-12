@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Channel;
+use App\Models\Contact;
 use App\Models\User;
 use App\Services\Chat\ChatService;
 use Illuminate\Http\Request;
@@ -16,11 +17,10 @@ class ChatController extends Controller
         private ChatService $chatService
     ) {}
 
-    public function index(Request $request): Response
+    public function index(Contact $contact = null): Response
     {
         $user = User::find(1);
-        $selectedContactId = (int) $request->input('contact_id');
-        $pageData = $this->chatService->getPageData($user, $selectedContactId);
+        $pageData = $this->chatService->getPageData($user, $contact);
 
         return Inertia::render('Chat/Index', $pageData);
     }
