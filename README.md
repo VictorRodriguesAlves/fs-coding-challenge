@@ -12,8 +12,8 @@ Este projeto implementa uma área de atendimento simulada, permitindo gerenciar 
 Antes de iniciar, garanta que você tenha o seguinte software instalado em sua máquina:
 
 * **PHP >= 8.2** 
-* **Composer** (Gerenciador de pacotes PHP)
-* **Node.js >= 22.x** (Recomendado usar a versão LTS ativa, **24.x**)
+* **Composer** 
+* **Node.js >= 22.x** 
 * **Mysql >= 5.7**
 
 ---
