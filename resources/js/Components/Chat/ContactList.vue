@@ -6,7 +6,7 @@
             </Link>
             <button
                 @click="$emit('toggleTheme')"
-                class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors cursor-pointer"
             >
                 <Sun v-if="isDark" class="w-5 h-5 text-gray-400" />
                 <Moon v-else class="w-5 h-5 text-gray-600" />
