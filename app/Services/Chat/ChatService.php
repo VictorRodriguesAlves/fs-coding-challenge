@@ -14,11 +14,10 @@ class ChatService
         private ChatRepository $chatRepository
     ) {}
 
-    public function getPageData(User $user, Contact $selectedContact = null): array
+    public function getPageData(User $user, Contact $selectedContact = null, ?string $searchQuery = null): array
     {
         $channels = $this->chatRepository->getAllChannels();
-        $contacts = $this->chatRepository->getContactsForUser($user);
-
+        $contacts = $this->chatRepository->getContactsForUser($user, $searchQuery);
         $messagesPaginator = null;
 
         if ($selectedContact) {

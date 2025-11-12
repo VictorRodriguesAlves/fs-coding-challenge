@@ -16,12 +16,22 @@ class ChatRepository
         return Channel::all();
     }
 
-    public function getContactsForUser(User $user): Collection
+    public function getContactsForUser(User $user, ?string $searchQuery = null): Collection
     {
-        return $user->contacts()
+        $query = $user->contacts()
             ->with('latestMessage')
-            ->withCount('unreadMessages')
-            ->get();
+            ->withCount('unreadMessages');
+
+        if ($searchQuery) {
+            $query->where(function ($q) use ($searchQuery) {
+                $q->where('contacts.name', 'LIKE', "%{$searchQuery}%")
+                    ->orWhereHas('latestMessage', function ($subQuery) use ($searchQuery) {
+                        $subQuery->where('content', 'LIKE', "%{$searchQuery}%");
+                    });
+            });
+        }
+
+        return $query->get();
     }
 
     public function findContactForUser(User $user, int $contactId): Contact|Collection

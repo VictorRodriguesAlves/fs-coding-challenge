@@ -17,10 +17,11 @@ class ChatController extends Controller
         private ChatService $chatService
     ) {}
 
-    public function index(Contact $contact = null): Response
+    public function index(Request $request, Contact $contact = null): Response
     {
         $user = User::find(1);
-        $pageData = $this->chatService->getPageData($user, $contact);
+        $searchQuery = $request->input('search', null);
+        $pageData = $this->chatService->getPageData($user, $contact, $searchQuery);
 
         return Inertia::render('Chat/Index', $pageData);
     }

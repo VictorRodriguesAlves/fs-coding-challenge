@@ -237,3 +237,9 @@ delay, reduziria a carga no servidor e permitiria a implementação de indicador
 * **Problema:** A implementação atual suporta apenas mensagens de texto.
 * **Solução:** Modificar o `ChatInput` para permitir o *upload* de arquivos (imagens, PDFs, etc.). Isso exigiria uma nova rota no backend para
 lidar com `multipart/form-data`, uma estratégia de armazenamento (como S3 ou disco local) e uma forma de exibir mídias (em vez de texto) no `MessageItem.vue`.
+
+### 6. Busca Full-Text (com Laravel Scout)
+* **Problema:** A busca atual utilizando `LIKE` só verifica o nome do contato e o conteúdo da última mensagem. Ela é lenta e limitada.
+* **Solução:** Implementar o **Laravel Scout** com um driver como **Meilisearch**. Isso permitiria indexar
+a tabela `messages` e oferecer uma busca instantânea (full-text) que encontra qualquer termo em todo
+o histórico de conversas, e não apenas na última.
