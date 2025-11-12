@@ -61,4 +61,4 @@ describe('Message Store (POST /messages)', function () {
             ->assertForbidden();
     });
 
-});
+})->group('chat');

@@ -36,4 +36,4 @@ describe('Channel Factory', function () {
             ->toThrow(\InvalidArgumentException::class);
     });
 
-});
+})->group('chat');

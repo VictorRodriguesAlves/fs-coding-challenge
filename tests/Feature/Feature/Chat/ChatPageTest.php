@@ -72,4 +72,4 @@ describe('Chat Page (GET /chat)', function () {
             ->assertForbidden();
     });
 
-});
+})->group('chat');

@@ -141,19 +141,25 @@ php artisan messages:generate --count=500
 # Gerar 50 mensagens APENAS para o contato com ID 2
 php artisan messages:generate 2 --count=50
 ```
-
 -----
 
 ## Executando os Testes
 
-O projeto utiliza Pest PHP para testes.
-
-Para rodar todos os testes, use:
+O projeto utiliza Pest para testes. Para rodar todos os testes, use:
 
 ```bash
   php artisan test
 ```
 
+Você também pode rodar grupos específicos de testes usando a flag `--group`:
+
+```bash
+  # Rodar apenas os testes da funcionalidade de Chat (UI, Serviços, Jobs)
+  php artisan test --group=chat
+
+  # Rodar apenas os testes dos comandos Artisan (Console)
+  php artisan test --group=console
+```
 ---
 
 

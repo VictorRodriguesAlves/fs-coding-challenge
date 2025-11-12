@@ -109,4 +109,4 @@ describe('Send Message Process', function () {
 
     });
 
-});
+})->group('chat');
