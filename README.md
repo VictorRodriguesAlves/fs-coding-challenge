@@ -18,15 +18,14 @@ Antes de iniciar, garanta que você tenha o seguinte software instalado em sua m
 
 ---
 
-## Guia de Instalação e Configuração
 
-Siga estes passos para configurar o ambiente de desenvolvimento.
+## Guia de Instalação e Execução
 
 ### 1\. Clonar o Repositório
 
 ```bash
   git clone https://github.com/VictorRodriguesAlves/fs-coding-challenge.git
-  cd fs-coding-challenge
+cd fs-coding-challenge
 ```
 
 ### 2\. Configuração do Backend (Laravel)
@@ -57,23 +56,34 @@ DB_USERNAME=seu_usuario
 DB_PASSWORD=sua_senha
 ```
 
-**Importante (Filas):** Para que o envio de mensagens assíncrono funcione corretamente, defina a conexão da fila para `database`:
+**Importante:** Para que o envio de mensagens assíncrono funcione corretamente, defina a conexão da fila para `database`:
 
 ```env
 QUEUE_CONNECTION=database
 ```
 
-### 4\. Configuração do Frontend (Vue)
+### 4\. Executando a Aplicação
+
+Para rodar a aplicação, você precisará de **dois terminais** abertos.
+
+**Terminal 1 (Frontend):**
 
 ```bash
-  # Instalar dependências do Node.js
+  # Instalar dependências
 npm install
 
-# Iniciar o servidor de desenvolvimento (Vite)
+# Iniciar o servidor de desenvolvimento
 npm run dev
 ```
 
------
+**Terminal 2 (Backend):**
+```bash
+  # Iniciar o servidor do Laravel
+php artisan serve
+```
+Após ambos os comandos estarem rodando, sua aplicação estará disponível em `http://127.0.0.1:8000`.
+
+---
 
 ## Inicialização do Banco de Dados
 
@@ -156,7 +166,7 @@ conecta os dois, permitindo que múltiplos atendentes tenham acesso e gerenciem 
 (ex: 'WhatsApp', 'Email'), enquanto a `contacts_identifiers` armazena o identificador único de cada cliente para cada canal
 (ex: o número `+55...` para o WhatsApp).
 
-**Essa modelagem não apenas resolve o "Shared Inbox", mas também torna o sistema altamente extensível. A arquitetura baseada em
+**Essa modelagem não apenas resolve o "Shared Inbox", mas também torna o sistema extensível. A arquitetura baseada em
 tabelas de configuração (`channels`) e pivots (`contact_user`) facilita a criação de futuras telas administrativas. Um painel
 de administrador, por exemplo, poderia gerenciar quais atendentes (`users`) têm acesso a quais `contacts` apenas adicionando ou
 removendo registros da tabela `contact_user`. Da mesma forma, controlar os canais ativos no sistema ou gerenciar os identificadores
@@ -192,7 +202,7 @@ de negócio existente.
 ### 3. Modelo de Acesso N:N (Shared Inbox)
 Optamos por uma tabela pivot `contact_user` em vez de um simples `contact.user_id`.
 
-* **Vantagem:** Arquitetura flexível e profissional que permite vários atendentes gerenciando o mesmo contato, como um CRM real.
+* **Vantagem:** Arquitetura flexível que permite vários atendentes gerenciando o mesmo contato, como um CRM real.
 * **Trade-off:** As consultas de banco de dados para verificar permissões e carregar dados são ligeiramente mais complexas (exigem `joins` com a tabela pivot).
 
 ### 4. Processamento Assíncrono 
