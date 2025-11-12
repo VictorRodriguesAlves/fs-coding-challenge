@@ -24,14 +24,14 @@ Antes de iniciar, garanta que você tenha o seguinte software instalado em sua m
 ### 1\. Clonar o Repositório
 
 ```bash
-  git clone https://github.com/VictorRodriguesAlves/fs-coding-challenge.git
+git clone https://github.com/VictorRodriguesAlves/fs-coding-challenge.git
 cd fs-coding-challenge
 ```
 
 ### 2\. Configuração do Backend (Laravel)
 
 ```bash
-  # Instalar dependências do Composer
+# Instalar dependências do Composer
 composer install
 
 # Copiar o arquivo de ambiente
@@ -69,7 +69,7 @@ Para rodar a aplicação, você precisará de **dois terminais** abertos.
 **Terminal 1 (Frontend):**
 
 ```bash
-  # Instalar dependências
+# Instalar dependências
 npm install
 
 # Iniciar o servidor de desenvolvimento
@@ -78,9 +78,18 @@ npm run dev
 
 **Terminal 2 (Backend):**
 ```bash
-  # Iniciar o servidor do Laravel
+# Iniciar o servidor do Laravel
 php artisan serve
 ```
+
+**Terminal 3 (Filas):**
+
+```bash
+# Iniciar o worker que processa o envio de mensagens
+php artisan queue:work
+```
+
+
 Após ambos os comandos estarem rodando, sua aplicação estará disponível em `http://127.0.0.1:8000`.
 
 ---
@@ -97,7 +106,7 @@ Para criar a estrutura de tabelas, execute o comando `migrate`. A flag `--seed` 
 <!-- end list -->
  
 ```bash
-   php artisan migrate --seed
+php artisan migrate --seed
 ``` 
  -----
 
